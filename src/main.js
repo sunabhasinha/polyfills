@@ -224,9 +224,41 @@ Array.prototype.myConcat = function (...args) {
 	return arr;
 };
 
-const letters = ['a', 'b', 'c'];
-const two = ['d', 'e'];
+// const letters = ['a', 'b', 'c'];
+// const two = ['d', 'e'];
 
-const alphaNumeric = letters.myConcat();
+// const alphaNumeric = letters.myConcat();
 
-console.log(alphaNumeric);
+// console.log(alphaNumeric);
+
+/**
+ * Flat Polyfill
+ * @param {*} depth
+ * @returns the flatten array according to depth, returns new array
+ */
+Array.prototype.myFlat = function (depth = 1) {
+	if (!this) {
+		throw Error(`${this} is not defined`);
+	}
+
+	let res = [];
+	const arr = this;
+
+	function flatten(arr, depth) {
+		for (let i = 0; i < arr.length; i++) {
+			if (Array.isArray(arr[i]) && depth > 0) {
+				flatten(arr[i], depth - 1);
+			} else {
+				res.push(arr[i]);
+			}
+		}
+	}
+
+	flatten(arr, depth);
+	return res;
+};
+
+const demo = [1, 2, [3, 4], [5, [6, 7], 8]];
+
+console.log(demo.flat(2));
+console.log(demo.myFlat(3));
